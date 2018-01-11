@@ -198,10 +198,134 @@ void PrintFirstNonRepeatingCharacter(const string &str)
     }
 }
 
+/* https://www.geeksforgeeks.org/print-list-items-containing-all-characters-of-a-given-word/ */
+void PrintListItemsContainingString(string str)
+{
+    int iNumOfItemsInList = 0;
+    cout << "Enter the number of items to be added into the list : " << endl;
+    cin >> iNumOfItemsInList;
+
+    vector<string> listOfString(iNumOfItemsInList);
+    for (auto & strings : listOfString)
+    {
+        cin >> strings;
+    }
+
+    bool bCharNotFound = false;
+    for (auto & strings : listOfString)
+    {
+        for (auto & c : str)
+        {
+            if (strings.find(c) == string::npos)
+            {
+                bCharNotFound = true;
+                break;
+            }
+            bCharNotFound = false;
+        }
+
+        if (bCharNotFound == false)
+            cout << strings << endl;
+    }
+    
+}
+
+/* https://www.geeksforgeeks.org/reverse-words-in-a-given-string/ */
+void ReverseWordsInAString(string str)
+{
+    vector<string> words;
+    
+    string sWord = "";
+    for (const auto &c : str)
+    {
+        if (c == ' ')
+        {
+            if (sWord.length() > 0)
+                words.push_back(sWord);
+
+            sWord = "";
+            continue;
+        }
+        sWord += c;
+    }
+
+    if (sWord.length() > 0)
+        words.push_back(sWord);
+
+    for (auto iIterate = rbegin(words); iIterate != rend(words); iIterate++)
+    {
+        cout << *iIterate << " ";
+    }
+
+}
+
+/* https://www.geeksforgeeks.org/run-length-encoding/ */
+void PrintRunLengthEncodedString(string str)
+{
+    string sEncodedString = "";
+    vector<pair<char, int>> counter;
+    for (const auto & c : str)
+    {
+        // For the first iteration
+        if (counter.empty())
+        {
+            pair<char, int> element(c, 1);
+            counter.push_back(element);            
+            continue;
+        }
+        if (counter.back().first == c) // To handle repeats
+        {
+            counter.back().second++;
+            continue;
+        }
+        pair<char, int> element(c, 1);
+        counter.push_back(element);
+        
+    } // End of for loop
+
+    for (const auto &p : counter)
+    {
+        sEncodedString += p.first;
+        sEncodedString += to_string(p.second);
+    }
+
+    cout << endl << "Encoded string is " << sEncodedString << endl;
+}
+
+/* https://www.geeksforgeeks.org/c-program-find-second-frequent-character/ */
+void PrintSecondMostFrequentCharacter(string str)
+{
+    vector<pair<char,int>> counter;
+    
+    for (int iIndex = 0; iIndex < 256; iIndex++)
+    {
+        pair<char, int> kvp(iIndex, 0);
+        counter.push_back(kvp);
+    }
+
+    for (const auto &c : str)
+    {
+        counter[c].second++;
+    }
+
+    sort(begin(counter), end(counter), [](auto kvp1, auto kvp2)
+    {
+        if (kvp1.second <= kvp2.second)
+            return true;
+        return false;
+    }
+    );
+
+    cout << "Second most frequent character is : " << counter[254].first << endl;
+
+}
+
 int main() {
     string str1;
     //string str2; // Separating this into a new line so that its easier to comment out when only one param is needed
-    cin >> str1;
+    //cin >> str1;
+    getline(cin, str1);
+
     //cin >> str2;
 
     // cout << MaxOccuringChar(str);
@@ -223,7 +347,15 @@ int main() {
     cin >> iSplitCount;
     SplitStringIntoEqualSubparts(str1, iSplitCount);*/
 
-    PrintFirstNonRepeatingCharacter(str1);
+    // PrintFirstNonRepeatingCharacter(str1);
+
+    // PrintListItemsContainingString(str1);
+
+    // ReverseWordsInAString(str1);
+
+    // PrintRunLengthEncodedString(str1);
+
+    // PrintSecondMostFrequentCharacter(str1);
 
     getchar();
     return 0;
