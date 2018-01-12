@@ -8,6 +8,8 @@
 
 using namespace std;
 
+/* I am implementing the solution to the excellent set of string related programming problems 
+   mentioned in the link: https://www.geeksforgeeks.org/c-programs-gq/string-programs-gq/  */
 
 /* https://www.geeksforgeeks.org/return-maximum-occurring-character-in-the-input-string/ */
 char MaxOccuringChar(const string &str)
@@ -293,10 +295,19 @@ void PrintRunLengthEncodedString(string str)
 }
 
 /* https://www.geeksforgeeks.org/c-program-find-second-frequent-character/ */
+struct KVP_Comparer
+{
+    inline bool operator() (const pair<char, int>& kvp1, const pair<char, int>& kvp2)
+    {
+        return (kvp1.second < kvp2.second);
+    }
+};
+
 void PrintSecondMostFrequentCharacter(string str)
 {
     vector<pair<char,int>> counter;
     
+    // Push how many times each of the characters appear into a vector
     for (int iIndex = 0; iIndex < 256; iIndex++)
     {
         pair<char, int> kvp(iIndex, 0);
@@ -305,20 +316,19 @@ void PrintSecondMostFrequentCharacter(string str)
 
     for (const auto &c : str)
     {
+        // Each time the character appears, increment its count
         counter[c].second++;
     }
 
-    sort(begin(counter), end(counter), [](auto kvp1, auto kvp2)
-    {
-        if (kvp1.second <= kvp2.second)
-            return true;
-        return false;
-    }
-    );
+    // Sort based on the counter value
+    sort(begin(counter), end(counter), KVP_Comparer());
 
+    // Last but one value is the second most frequent element. Last will be the most frequent
     cout << "Second most frequent character is : " << counter[254].first << endl;
 
 }
+
+/* End of https://www.geeksforgeeks.org/c-program-find-second-frequent-character/ */
 
 int main() {
     string str1;
@@ -355,7 +365,7 @@ int main() {
 
     // PrintRunLengthEncodedString(str1);
 
-    // PrintSecondMostFrequentCharacter(str1);
+     PrintSecondMostFrequentCharacter(str1);
 
     getchar();
     return 0;
